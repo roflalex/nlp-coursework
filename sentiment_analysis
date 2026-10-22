@@ -1,0 +1,118 @@
+"""
+===========================================================
+SCIKIT-LEARN SENTIMENT ANALYSIS (IMPROVED VERSION)
+===========================================================
+
+Purpose:
+    Improve sentiment predictions using better techniques:
+    - More training data
+    - TF-IDF vectorization
+    - N-grams (word pairs)
+
+What this code does:
+    1. Converts text into numerical features (TF-IDF)
+    2. Trains a machine learning model
+    3. Tests multiple phrases
+    4. Prints predictions
+
+Key Improvements:
+    - More examples â†’ better learning
+    - TF-IDF â†’ better word importance
+    - n-grams â†’ understands phrases like "not good"
+
+Requirements:
+    pip install scikit-learn
+
+Concepts:
+    - TF-IDF: Weighs important words more heavily
+    - n-grams: Looks at word combinations
+    - Logistic Regression: Classification model
+
+===========================================================
+"""
+
+# ---------------------------------------------------------
+# IMPORT LIBRARIES
+# ---------------------------------------------------------
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.linear_model import LogisticRegression
+
+
+# ---------------------------------------------------------
+# TRAINING DATA (EXPANDED)
+# ---------------------------------------------------------
+texts = [
+    # POSITIVE
+    "I love this",
+    "This is great",
+    "Amazing experience",
+    "Very good",
+    "Excellent work",
+    "Fantastic explanation",
+    "This is useful",
+    "I enjoyed this",
+    "Very helpful",
+    "I am happy with this",
+
+    # NEGATIVE
+    "I hate this",
+    "This is terrible",
+    "Very bad",
+    "Awful experience",
+    "This is disappointing",
+    "I am confused",
+    "This is boring",
+    "I do not like this",
+    "Very poor",
+    "This is useless"
+]
+
+labels = [
+    1,1,1,1,1,1,1,1,1,1,   # POSITIVE
+    0,0,0,0,0,0,0,0,0,0    # NEGATIVE
+]
+
+
+# ---------------------------------------------------------
+# CONVERT TEXT TO FEATURES (TF-IDF + N-GRAMS)
+# ---------------------------------------------------------
+vectorizer = TfidfVectorizer(ngram_range=(1, 2))
+X = vectorizer.fit_transform(texts)
+
+
+# ---------------------------------------------------------
+# TRAIN MODEL
+# ---------------------------------------------------------
+model = LogisticRegression()
+model.fit(X, labels)
+
+
+# ---------------------------------------------------------
+# TEST DATA
+# ---------------------------------------------------------
+test_texts = [
+    "I love this module!",
+    "This is terrible.",
+    "Hugging Face makes AI easy.",
+    "I do not like this at all.",
+    "This lecture is very interesting.",
+    "The movie was boring and too long.",
+    "That was a fantastic explanation.",
+    "I am confused by this topic.",
+    "This software is useful.",
+    "The experience was disappointing.",
+    "This is not bad",
+    "Not great, not terrible"
+]
+
+X_test = vectorizer.transform(test_texts)
+predictions = model.predict(X_test)
+
+
+for text, pred in zip(test_texts, predictions):
+
+    label = "POSITIVE" if pred == 1 else "NEGATIVE"
+
+    print("Text:", text)
+    print("Prediction:", label)
+    print()
